@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block content %}
+
+
+{% if request.user.is_authenticated %}<div>Du bist eingeloggt!<br><br>
+
+    <div id="chatContainer">
+        {% for message in messages %}
+            {% if message.author.id == request.user.id %}
+                <div class="chat rightSide"><div class="messageBox rightSide own"> <div>{{ message.text }} <span class="message-date">({{ message.created_at }}<span>)</div>
+                </div></div>
+            {% else %}
+                <div class="chat"><div class="messageBox"><b>{{ message.author}}:</b> <div>{{ message.text }} <span class="message-date">({{ message.created_at }}<span>)</div>
+                </div></div>
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    <script>
+
+    </script>
+
+    <form onsubmit="sendMessage(); return false;" method="POST">
+
+        {% csrf_token %}
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input class="mdl-textfield__input" type="text" id="messageField" name="textmessage">
+            <label class="mdl-textfield__label" for="messageField">Text...</label>
+        </div>
+
+        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+            Send
+        </button>
+    </form>
+
+</div>
+{% else %}
+<h1>Nicht eingeloggt</h1>
+<p>
+    Du bist aktuell nicht eingeloggt! Bitte logge dich ein.<br>
+    Bitte klicke <a href="/login/">hier</a>.
+</p>
+{% endif %}
+
+{% endblock %}
